@@ -86,21 +86,72 @@ Generating the final shuffled sequence, [`AcrIIa4.min_homology.fasta`](seqs/AcrI
 
 
 ## Saturated mutagenesis of AcrIIa2
-Requires 2480 repair templates
+Requires 2604 repair templates.
+
+Added files `upstream.dna` and `downstream.dna` to the `seqs/` directory, containing DNA strings (no `fasta` header) of the intended neighboring sequences for the original and shuffled sequences.
 ```
+mkdir 02_AcrIIa2_mutagenesis
+python3 Xmera/bin/buildMutagenicRTs.py \
+    --first seqs/AcrIIa2.min_homology.fasta \
+    --second seqs/AcrIIa2.cds.fasta \
+    --length 163 \
+    --codons seqs/codons.txt \
+    --upstream seqs/Acr.upstream.fasta \
+    --downstream seqs/Acr.downstream.fasta \
+    > 02_AcrIIa2_mutagenesis/AcrIIa2_mutagenesis.fasta
 
 ```
 
+## Chimeragenesis of AcrIIa2 and AcrIIa2b
+
+```
+mkdir -p 04_RT_length_homology
+parallel -j 1 python3 Xmera/bin/buildRTs.py {1} {2} \
+    --flanking seqs/Acr \
+    --repair-template-length {3} \
+    --mode aligned \
+    --unique protein \
+    --primer-length 15 \
+    --oligo-length 190 \
+    --five-prime-padding gcgacaacggtttaggtgggtacgggtccccattccttatatagaaatggcatgttagatcggagcttccaaatcacgat \
+    --three-prime-padding accgttctttgttggaagaatagctaagcgcagggacttcccgaatctcggtattatcccggtaagtgtggactatattt \
+    > 04_RT_length_homology/AcrIIa2_AcrIIa2b.RT-all.fasta  \
+    ::: seqs/AcrIIa2.cds \
+    ::: seqs/AcrIIa2b.cds \
+    ::: 40 50 60 70 80 90 100 120 140 160
+
+parallel -j 1 python3 Xmera/bin/buildRTs.py {2} {1} \
+    --flanking seqs/Acr \
+    --repair-template-length {3} \
+    --mode aligned \
+    --unique protein \
+    --primer-length 15 \
+    --oligo-length 190 \
+    --five-prime-padding gcgacaacggtttaggtgggtacgggtccccattccttatatagaaatggcatgttagatcggagcttccaaatcacgat \
+    --three-prime-padding accgttctttgttggaagaatagctaagcgcagggacttcccgaatctcggtattatcccggtaagtgtggactatattt \
+    > 04_RT_length_homology/AcrIIa2b_AcrIIa2.RT-all.fasta  \
+    ::: seqs/AcrIIa2.cds \
+    ::: seqs/AcrIIa2b.cds \
+    ::: 40 50 60 70 80 90 100 120 140 160
+
+parallel -j 1 python3 Xmera/bin/buildRTs.py {1} {2} --flanking seqs/Acr --repair-template-length {3} --mode aligned --unique protein --primer-length 15 --oligo-length 190 --five-prime-padding gcgacaacggtttaggtgggtacgggtccccattccttatatagaaatggcatgttagatcggagcttccaaatcacgat --three-prime-padding accgttctttgttggaagaatagctaagcgcagggacttcccgaatctcggtattatcccggtaagtgtggactatattt  > 0N_RT_length_homology/AcrIIa2b_AcrIIa2.RT-all.fasta  ::: seqs/AcrIIa2b.cds ::: seqs/AcrIIa2.cds :::  40 50 60 70 80 90 100 120 140 160
+
+```
 
 
 ## Deletion scan of AcrIIa4
-* requires 3828 repair templates
-* requires codon-shuffled allele of AcrIIa4
+Requires 3916 repair templates.
 
-
-
-```
-
+Will generate repair templates only where the second homology arm start position is >= the first homology arm end position.
+```bash
+mkdir -p 04_AcrIIa4_deletion_scan
+python3 Xmera/bin/buildRTs.py seqs/AcrIIa4.cds seqs/AcrIIa4.min_homology \
+--mode extensive \
+--deletion \
+--flanking seqs/Acr \
+--repair-template-length 160 \
+--primer-length 15 \
+--oligo-length 190 > 04_AcrIIa4_deletion_scan/AcrIIa4_deletion_scan.fasta
 ```
 
 
