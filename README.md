@@ -1,6 +1,8 @@
 # README
 
 ## All possible chimeras of AcrIIa2b and AcrIIa4
+Requires 23056 repair templates.
+
 This experiment seeks to generate and evaluate function of all 
 possible simple chimeras (i.e. single-transition) between 
 [`AcrIIa2b`](seqs/AcrIIa2b.cds.fasta) and [`AcrIIa4`](seqs/AcrIIa4.cds.fasta).
@@ -26,7 +28,7 @@ python3 Xmera/bin/buildRTs.py seqs/AcrIIa4.cds seqs/AcrIIa2b.cds \
 ## Initialize codon usage table
 Will be used for any saturated mutagenesis or deletion scan. Yeast codon usage table retrieved from [kazusa.or.jp](https://www.kazusa.or.jp/codon/cgi-bin/showcodon.cgi?species=4932&aa=1&style=N) and the body of the table was saved as  `codonTable.txt` which is parsed and processed by [`formatCodons.py`](https://github.com/cory-weller/Xmera/blob/b33db0d/bin/formatCodons.py) into [`codons.txt`](seqs/codons.txt):
 
-```
+```bash
 (
 cd seqs && \
 if [ ! -f "codons.txt" ]; then python3 ../Xmera/bin/formatCodons.py > "codons.txt"; fi 
@@ -89,7 +91,7 @@ Generating the final shuffled sequence, [`AcrIIa4.min_homology.fasta`](seqs/AcrI
 Requires 2604 repair templates.
 
 Added files `upstream.dna` and `downstream.dna` to the `seqs/` directory, containing DNA strings (no `fasta` header) of the intended neighboring sequences for the original and shuffled sequences.
-```
+```bash
 mkdir 02_AcrIIa2_mutagenesis
 python3 Xmera/bin/buildMutagenicRTs.py \
     --first seqs/AcrIIa2.min_homology.fasta \
@@ -102,9 +104,30 @@ python3 Xmera/bin/buildMutagenicRTs.py \
 
 ```
 
-## Chimeragenesis of AcrIIa2 and AcrIIa2b
 
+
+## Deletion scan of AcrIIa4
+Requires 3916 repair templates.
+
+Will generate repair templates only where the second homology arm start position is >= the first homology arm end position.
+```bash
+mkdir -p 04_AcrIIa4_deletion_scan
+python3 Xmera/bin/buildRTs.py seqs/AcrIIa4.cds seqs/AcrIIa4.min_homology \
+--mode extensive \
+--deletion \
+--flanking seqs/Acr \
+--repair-template-length 160 \
+--primer-length 15 \
+--oligo-length 190 > 04_AcrIIa4_deletion_scan/AcrIIa4_deletion_scan.fasta
 ```
+
+
+
+## Chimeragenesis of AcrIIa2 and AcrIIa2b
+Requires 1540 repair templates.
+
+A downsized version of the PCA1 chimeragenesis experiment, running multiple repair template lengths from 20 to 80 bp (for each homology arm).
+```bash
 mkdir -p 04_RT_length_homology
 parallel -j 1 python3 Xmera/bin/buildRTs.py {1} {2} \
     --flanking seqs/Acr \
@@ -134,24 +157,4 @@ parallel -j 1 python3 Xmera/bin/buildRTs.py {2} {1} \
     ::: seqs/AcrIIa2b.cds \
     ::: 40 50 60 70 80 90 100 120 140 160
 
-parallel -j 1 python3 Xmera/bin/buildRTs.py {1} {2} --flanking seqs/Acr --repair-template-length {3} --mode aligned --unique protein --primer-length 15 --oligo-length 190 --five-prime-padding gcgacaacggtttaggtgggtacgggtccccattccttatatagaaatggcatgttagatcggagcttccaaatcacgat --three-prime-padding accgttctttgttggaagaatagctaagcgcagggacttcccgaatctcggtattatcccggtaagtgtggactatattt  > 0N_RT_length_homology/AcrIIa2b_AcrIIa2.RT-all.fasta  ::: seqs/AcrIIa2b.cds ::: seqs/AcrIIa2.cds :::  40 50 60 70 80 90 100 120 140 160
-
 ```
-
-
-## Deletion scan of AcrIIa4
-Requires 3916 repair templates.
-
-Will generate repair templates only where the second homology arm start position is >= the first homology arm end position.
-```bash
-mkdir -p 04_AcrIIa4_deletion_scan
-python3 Xmera/bin/buildRTs.py seqs/AcrIIa4.cds seqs/AcrIIa4.min_homology \
---mode extensive \
---deletion \
---flanking seqs/Acr \
---repair-template-length 160 \
---primer-length 15 \
---oligo-length 190 > 04_AcrIIa4_deletion_scan/AcrIIa4_deletion_scan.fasta
-```
-
-
