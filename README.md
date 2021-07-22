@@ -158,3 +158,20 @@ parallel -j 1 python3 Xmera/bin/buildRTs.py {2} {1} \
     ::: 40 50 60 70 80 90 100 120 140 160
 
 ```
+
+
+## Add primers
+```bash
+Xmera/bin/addPrimers.py 01_all_chimeras/AcrIIa2b_AcrIIa4.RT-160.fasta 201   > Acr.RT.txt
+Xmera/bin/addPrimers.py 01_all_chimeras/AcrIIa4_AcrIIa2b.RT-160.fasta 202   >> Acr.RT.txt
+
+
+Xmera/bin/addPrimers.py 03_AcrIIa4_deletion_scan/AcrIIa4_deletion_scan.fasta 203  >> Acr.RT.txt
+
+Xmera/bin/addPrimers.py 04_RT_length_homology/AcrIIa2b_AcrIIa2.RT-all.fasta 204  >> Acr.RT.txt
+Xmera/bin/addPrimers.py 04_RT_length_homology/AcrIIa2_AcrIIa2b.RT-all.fasta 205  >> Acr.RT.txt
+
+# SKIP (not enough room on array)
+# Xmera/bin/addPrimers.py 02_AcrIIa2_mutagenesis/AcrIIa2_mutagenesis.fasta 206  >> Acr.RT.txt
+
+```
