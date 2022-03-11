@@ -9,3 +9,12 @@
 | AcrIIA4-deletion-scan | 2539 | [benchling](https://benchling.com/s/seq-4DlGBn1wo3uptGECPzN8?m=slm-FZpJ573JdKSTSq7CIxaZ) | 
 
 See HO locus [here](https://benchling.com/s/seq-CAOyHSUOz6dnhy7o6HHB?m=slm-uYry081ZAM5nOQ45Sffn)
+
+
+./Xmera.sif buildRTs.py seqs/AcrIIa4.cds seqs/AcrIIa2b.cds \
+--mode extensive \
+--upstream seqs/GAL-promoter.fasta \
+--downstream seqs/Tsynth8-HO.fasta \
+--repair-template-length 160 \
+--primer-length 15 \
+--oligo-length 190 
