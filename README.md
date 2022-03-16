@@ -20,7 +20,37 @@ See HO locus [here](https://benchling.com/s/seq-CAOyHSUOz6dnhy7o6HHB?m=slm-uYry0
 
 ### Standard Chimeras for 2A2 and 2A2b
 
-Generate repair templates for aligned chimeras between AcrIIA2 and AcrIIA2b, saving a [`AcrIIA2-AcrIIA2b-RTs.fasta`](AcrIIA2-AcrIIA2b-RTs.fasta)
+Generate repair templates for aligned chimeras between AcrIIA2 and AcrIIA2b, saving a [`AcrIIA2-AcrIIA2b-aligned-RTs.fasta`](AcrIIA2-AcrIIA2b-aligned-RTs.fasta)
+```bash
+./Xmera.sif ./Xmera/src/buildRTs.py seqs/AcrIIA2-cds seqs/AcrIIA2b-cds \
+    --mode aligned \
+    --unique dna \
+    --upstream seqs/GAL-promoter.fasta \
+    --downstream seqs/Tsynth8-HO.fasta \
+    --repair-template-length 200 \
+    --primer-length 15 \
+    --oligo-length 230 \
+    > AcrIIA2-AcrIIA2b-aligned-RTs.fasta
+
+grep '^>' AcrIIA2-AcrIIA2b-aligned-RTs.fasta | wc -l
+```
+
+Generate repair templates for aligned chimeras between AcrIIA2b and AcrIIA2, saving as [`AcrIIA2b-AcrIIA2-aligned-RTs.fasta`](AcrIIA2b-AcrIIA2-aligned-RTs.fasta)
+```bash
+./Xmera.sif ./Xmera/src/buildRTs.py seqs/AcrIIA2b-cds seqs/AcrIIA2-cds \
+    --mode aligned \
+    --unique dna \
+    --upstream seqs/GAL-promoter.fasta \
+    --downstream seqs/Tsynth8-HO.fasta \
+    --repair-template-length 200 \
+    --primer-length 15 \
+    --oligo-length 230 \
+    > AcrIIA2b-AcrIIA2-aligned-RTs.fasta
+
+grep '^>' AcrIIA2b-AcrIIA2-aligned-RTs.fasta | wc -l
+```
+
+Generate repair templates for unaligned chimeras between AcrIIA2 and AcrIIA2b, saving a [`AcrIIA2-AcrIIA2b-unaligned-RTs.fasta`](AcrIIA2-AcrIIA2b-unaligned-RTs.fasta)
 ```bash
 ./Xmera.sif ./Xmera/src/buildRTs.py seqs/AcrIIA2-cds seqs/AcrIIA2b-cds \
     --mode all \
@@ -28,15 +58,15 @@ Generate repair templates for aligned chimeras between AcrIIA2 and AcrIIA2b, sav
     --unique dna \
     --upstream seqs/GAL-promoter.fasta \
     --downstream seqs/Tsynth8-HO.fasta \
-    --repair-template-length 190 \
+    --repair-template-length 200 \
     --primer-length 15 \
-    --oligo-length 220 \
-    > AcrIIA2-AcrIIA2b-RTs.fasta
+    --oligo-length 230 \
+    > AcrIIA2-AcrIIA2b-unaligned-RTs.fasta
 
-grep '^>' AcrIIA2-AcrIIA2b-RTs.fasta | wc -l
+grep '^>' AcrIIA2-AcrIIA2b-unaligned-RTs.fasta | wc -l
 ```
 
-Generate repair templates for aligned chimeras between AcrIIA2b and AcrIIA2, saving as [`AcrIIA2b-AcrIIA2-RTs.fasta`](AcrIIA2b-AcrIIA2-RTs.fasta)
+Generate repair templates for unaligned chimeras between AcrIIA2b and AcrIIA2, saving as [`AcrIIA2b-AcrIIA2-unaligned-RTs.fasta`](AcrIIA2b-AcrIIA2-unaligned-RTs.fasta)
 ```bash
 ./Xmera.sif ./Xmera/src/buildRTs.py seqs/AcrIIA2b-cds seqs/AcrIIA2-cds \
     --mode all \
@@ -44,12 +74,12 @@ Generate repair templates for aligned chimeras between AcrIIA2b and AcrIIA2, sav
     --unique dna \
     --upstream seqs/GAL-promoter.fasta \
     --downstream seqs/Tsynth8-HO.fasta \
-    --repair-template-length 190 \
+    --repair-template-length 200 \
     --primer-length 15 \
-    --oligo-length 220 \
-    > AcrIIA2b-AcrIIA2-RTs.fasta
+    --oligo-length 230 \
+    > AcrIIA2b-AcrIIA2-unaligned-RTs.fasta
 
-grep '^>' AcrIIA2b-AcrIIA2-RTs.fasta | wc -l
+grep '^>' AcrIIA2b-AcrIIA2-unaligned-RTs.fasta | wc -l
 ```
 
 
@@ -61,9 +91,9 @@ Generate repair templates for all-possible chimeras between AcrIIA2b and AcrIIa4
     --unique dna \
     --upstream seqs/GAL-promoter.fasta \
     --downstream seqs/Tsynth8-HO.fasta \
-    --repair-template-length 190 \
+    --repair-template-length 200 \
     --primer-length 15 \
-    --oligo-length 220 \
+    --oligo-length 230 \
     > AcrIIA2b-AcrIIA4-RTs.fasta
 
 grep '^>' AcrIIA2b-AcrIIA4-RTs.fasta | wc -l
@@ -76,12 +106,49 @@ Generate repair templates for all-possible chimeras between AcrIIA4 and AcrIIA2b
     --unique dna \
     --upstream seqs/GAL-promoter.fasta \
     --downstream seqs/Tsynth8-HO.fasta \
-    --repair-template-length 190 \
+    --repair-template-length 200 \
     --primer-length 15 \
-    --oligo-length 220 \
+    --oligo-length 230 \
     > AcrIIA4-AcrIIA2b-RTs.fasta
 
 grep '^>' AcrIIA4-AcrIIA2b-RTs.fasta | wc -l
+```
+
+Generate repair templates for aligned chimeras between AcrIIA2 and AcrIIA2b *with variable length homology arms* saving as [`AcrIIA2-AcrIIA2b-variable-arm-RTs.fasta`](AcrIIA2-AcrIIA2b-variable-arm-RTs.fasta)
+```bash
+for i in $(seq 40 10 200); do
+    ./Xmera.sif ./Xmera/src/buildRTs.py seqs/AcrIIA2-cds seqs/AcrIIA2b-cds \
+        --mode aligned \
+        --unique dna \
+        --upstream seqs/GAL-promoter.fasta \
+        --downstream seqs/Tsynth8-HO.fasta \
+        --repair-template-length ${i} \
+        --primer-length 15 \
+        --oligo-length 230 \
+        --five-prime-padding ccaagtcactaaaaagaagaggattcgtggccaggccgtgttgcgccacatatagctcgccgggtctctggcttcgacatggatacccgccacaatcgggcgaaacagtttattgagaactggctgcggtagtgatgggaattcgctgcttttaggcactgaggctgaaatggttcaagtaaaacgcgatccaaccccgt \
+        --three-prime-padding catggtatgctctcctaatgaagtgccgtgagcttgtagatcaacgggacatacttgagtttaagagcgtaagtgacccctgatatttctccccaatcccgatagtcaagcatgtagtattcgtcataaactggcgcataaacttccgcaatacattctagtgtacggctggcggttgggctaacttaagtcgggcagta
+done > AcrIIA2-AcrIIA2b-variable-arm-RTs.fasta
+
+grep '>' AcrIIA2-AcrIIA2b-variable-arm-RTs.fasta | wc -l
+```
+
+
+Generate repair templates for aligned chimeras between AcrIIA2b and AcrIIA2 *with variable length homology arms* saving as [`AcrIIA2b-AcrIIA2-variable-arm-RTs.fasta`](AcrIIA2b-AcrIIA2-variable-arm-RTs.fasta)
+```bash
+for i in $(seq 40 10 200); do
+    ./Xmera.sif ./Xmera/src/buildRTs.py seqs/AcrIIA2b-cds seqs/AcrIIA2-cds \
+        --mode aligned \
+        --unique dna \
+        --upstream seqs/GAL-promoter.fasta \
+        --downstream seqs/Tsynth8-HO.fasta \
+        --repair-template-length ${i} \
+        --primer-length 15 \
+        --oligo-length 230 \
+        --five-prime-padding ccaagtcactaaaaagaagaggattcgtggccaggccgtgttgcgccacatatagctcgccgggtctctggcttcgacatggatacccgccacaatcgggcgaaacagtttattgagaactggctgcggtagtgatgggaattcgctgcttttaggcactgaggctgaaatggttcaagtaaaacgcgatccaaccccgt \
+        --three-prime-padding catggtatgctctcctaatgaagtgccgtgagcttgtagatcaacgggacatacttgagtttaagagcgtaagtgacccctgatatttctccccaatcccgatagtcaagcatgtagtattcgtcataaactggcgcataaacttccgcaatacattctagtgtacggctggcggttgggctaacttaagtcgggcagta
+done > AcrIIA2b-AcrIIA2-variable-arm-RTs.fasta
+
+grep '^>' AcrIIA2b-AcrIIA2-variable-arm-RTs.fasta | wc -l
 ```
 
 
@@ -96,16 +163,10 @@ Generate repair templates for AcrIIA4 deletion scan, saving as [`AcrIIA4-deletio
     --deletion \
     --upstream seqs/GAL-promoter.fasta \
     --downstream seqs/Tsynth8-HO.fasta \
-    --repair-template-length 190 \
+    --repair-template-length 200 \
     --primer-length 15 \
-    --oligo-length 220 \
+    --oligo-length 230 \
     > AcrIIA4-deletion-scan-RTs.fasta
 
 grep '^>' AcrIIA4-deletion-scan-RTs.fasta | wc -l
 ```
-
-
-random 200-mers for padding:
-`ccaagtcactaaaaagaagaggattcgtggccaggccgtgttgcgccacatatagctcgccgggtctctggcttcgacatggatacccgccacaatcgggcgaaacagtttattgagaactggctgcggtagtgatgggaattcgctgcttttaggcactgaggctgaaatggttcaagtaaaacgcgatccaaccccgt`
-
-`catggtatgctctcctaatgaagtgccgtgagcttgtagatcaacgggacatacttgagtttaagagcgtaagtgacccctgatatttctccccaatcccgatagtcaagcatgtagtattcgtcataaactggcgcataaacttccgcaatacattctagtgtacggctggcggttgggctaacttaagtcgggcagta`
