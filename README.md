@@ -170,3 +170,21 @@ Generate repair templates for AcrIIA4 deletion scan, saving as [`AcrIIA4-deletio
 
 grep '^>' AcrIIA4-deletion-scan-RTs.fasta | wc -l
 ```
+
+
+## Combine into single fasta
+```bash
+./Xmera.sif Xmera/src/addPrimers.py  AcrIIA2-AcrIIA2b-variable-arm-RTs.fasta 201 > Acr-RTs.txt
+./Xmera.sif Xmera/src/addPrimers.py  AcrIIA4-AcrIIA2b-RTs.fasta 202 >> Acr-RTs.txt
+./Xmera.sif Xmera/src/addPrimers.py  AcrIIA2b-AcrIIA2-unaligned-RTs.fasta 203 >> Acr-RTs.txt
+./Xmera.sif Xmera/src/addPrimers.py  AcrIIA2b-AcrIIA2-variable-arm-RTs.fasta 204 >> Acr-RTs.txt
+./Xmera.sif Xmera/src/addPrimers.py  AcrIIA2b-AcrIIA4-RTs.fasta 205 >> Acr-RTs.txt
+./Xmera.sif Xmera/src/addPrimers.py  AcrIIA2b-AcrIIA2-aligned-RTs.fasta 206 >> Acr-RTs.txt
+./Xmera.sif Xmera/src/addPrimers.py  AcrIIA2-AcrIIA2b-unaligned-RTs.fasta 207 >> Acr-RTs.txt
+./Xmera.sif Xmera/src/addPrimers.py  AcrIIA4-deletion-scan-RTs.fasta 208 >> Acr-RTs.txt
+./Xmera.sif Xmera/src/addPrimers.py  AcrIIA2-AcrIIA2b-aligned-RTs.fasta 209 >> Acr-RTs.txt
+
+
+wc -l Acr-RTs.txt 
+# 34863
+```
